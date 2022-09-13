@@ -1,0 +1,17 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "args": ["/nfs/data2/2022_Run4/com-proxima2a/2022-09-11/RAW_DATA/IHR/David/GasCell/MUF16_CO2/single_test_wedges/1_2_bar/grid_scan_5_master.h5"],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        }
+    ]
+}

@@ -4,9 +4,29 @@ import numpy as np
 import sys
 import os
 
-assert len(sys.argv) == 2, "Please supply one argument, the h5 master file."
-assert os.path.exists(sys.argv[1]), "Specified file does not exist"
-print(f"Processing master HDF5 file {sys.argv[1]}...")
-with h5py.File(sys.argv[1],"r+") as f:
-    
-print(f"Finished processing HDF5 file {sys.argv[1]}.")
+assert len(sys.argv) == 2, 'Please supply one argument, the HDF5 master file, or a .lst text file with filenames separated by newlines.'
+assert os.path.exists(sys.argv[1]), 'Specified file does not exist.'
+
+def process_file(filename):
+    print(f'Processing master HDF5 file {filename}...')
+    with h5py.File(filename,'r+') as f:
+        vec = f['entry/instrument/detector/transformations/translation/'].attrs.get('vector')
+        print(f'Old vector is {vec}')
+        positivised_vec = np.abs(vec)
+        print(f'New vector is {positivised_vec}')
+        f['entry/instrument/detector/transformations/translation/'].attrs.modify('vector', positivised_vec)
+    print(f'Finished processing HDF5 file {filename}.')
+
+if sys.argv[1].endswith('master.h5'):
+    process_file(sys.argv[1])
+
+elif sys.argv[1].endswith('.lst'):
+    print(f'Processing list of files {sys.argv[1]}...')
+    with open(sys.argv[1]) as f:
+        files_list = f.read().splitlines()
+    for master_file in files_list:
+        process_file(master_file)
+    print(f'Finished processing list of files {sys.argv[1]}.')
+
+else:
+    print('Could not interpret specified file.')
